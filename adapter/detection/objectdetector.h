@@ -6,9 +6,9 @@
 #endif
 
 #include <QList>
-#include <QPointer>
+#include <memory>
 #include <opencv2/core/types.hpp>
-#include "domain/product/valueobjects.h"
+#include "domain/detection/dto.h"
 
 
 class IDetector {
@@ -17,7 +17,7 @@ public:
 
 public:
     virtual bool init() = 0;
-    virtual bool process(const cv::Mat& frame, QList<Product>& products) = 0;
+    virtual bool process(const cv::Mat& frame, std::vector<DetectionDto>& results) = 0;
     virtual bool stop() = 0;
 };
 
@@ -31,11 +31,11 @@ public:
     ~ObjectDetector();
 
     bool init();
-    bool process(const cv::Mat& frame, QList<Product>& products);
+    bool process(const cv::Mat& frame, std::vector<DetectionDto>& results);
     bool stop();
 
 private:
-    QPointer<IDetector> iDetector;
+    std::unique_ptr<IDetector> iDec;
 };
 
 #endif // ADAPTER_OBJECTDETECTOR_H

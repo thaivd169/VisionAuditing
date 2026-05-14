@@ -22,7 +22,7 @@ void VideoCapturer::startCapture() {
         stopCapture();
     }
     // set `output-corrupt=false` cho avdec_h265` nếu muốn đọc barcode/OCR khó, chữ cực nhỏ`
-    if (cap.open(QString("rtspsrc location=%1 latency=70 ! "
+    if (cap.open(QString("rtspsrc location=%1 latency=200 ! "
                          "rtph265depay ! h265parse ! "
                          "queue max-size-buffers=1 leaky=downstream ! avdec_h265 output-corrupt=false ! videoconvert ! "
                          "appsink drop=true sync=false")

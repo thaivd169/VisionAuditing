@@ -8,9 +8,8 @@
     - [Preparation](#preparation)
     - [Qt6](#qt6)
     - [Build and release OpenCV library](#build-and-release-opencv-library)
-    - [Build and release gRPC library](#build-and-release-grpc-library)
-    - [Build and release spdlog library](#build-and-release-spdlog-library)
-    - [Discard write permission for all release folders](#discard-write-permission-for-all-release-folders)
+    - [Install OnnxRuntime library](#install-onnxruntime-library)
+    - [Download AI models](#download-ai-models)
   - [At the second times](#at-the-second-times)
     - [Preparation](#preparation-1)
     - [Arrangement](#arrangement)
@@ -65,13 +64,14 @@ cmake \
 make install -j$(nproc)
 ldconfig
 ```
-### Build and release gRPC library
+### Install OnnxRuntime library
+```
+wget https://github.com/microsoft/onnxruntime/releases/download/v1.26.0/onnxruntime-linux-x64-1.26.0.tgz
+sha256sum onnxruntime-linux-x64-1.26.0.tgz
+tar -xvf ./onnxruntime-linux-x64-1.26.0.tgz
+```
 
-
-### Build and release spdlog library
-
-
-### Discard write permission for all release folders
+### Download AI models 
 
 
 ## At the second times

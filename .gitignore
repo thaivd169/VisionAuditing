@@ -78,3 +78,6 @@ CMakeUserPresets.json
 # --------
 *.dll
 *.exe
+
+# Assets
+assets/*

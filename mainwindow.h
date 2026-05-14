@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QThread>
 #include "adapter/videocapturer/videocapturer.h"
+#include "adapter/imageworker/imageworker.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,14 +26,22 @@ signals:
 
 private slots:
     void newMainFrame(const cv::Mat& frame);
+    void imageWorkerDone(const QList<DetectionDto>& dects);
 
 private:
     Ui::MainWindow *ui;
     VideoCapturer *_videoCapturer;
-    QThread _captureThread;      // Receive image input from VEE device
+    ImageWorker* _imageWorker;
+    QThread _captureThread;
+    QThread _imageProcessThread;
 
-    void captureFromStream(const QString &url);
+    QList<DetectionDto> _dects;
+
+    void initVideoCapturer(const QString &url);
+    void initImageWorker();
+
     void startThreads();
     void displayFrame(cv::Mat &frame);
+    void drawOsd(cv::Mat &frame);
 };
 #endif // MAINWINDOW_H
