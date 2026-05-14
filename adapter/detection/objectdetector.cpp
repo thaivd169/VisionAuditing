@@ -1,6 +1,5 @@
 #include "objectdetector.h"
 #include "lib/yolos_cpp/include/yolos/tasks/detection.hpp"
-#include <string>
 
 
 class Yolo11Concrete : public IDetector {
