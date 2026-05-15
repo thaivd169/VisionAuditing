@@ -6,6 +6,7 @@
 
 #include "adapter/imageworker/imageworker.h"
 #include "adapter/videocapturer/videocapturer.h"
+#include "domain/barcode/dto.h"
 #include "domain/mot/dto.h"
 
 QT_BEGIN_NAMESPACE
@@ -28,6 +29,7 @@ class MainWindow : public QMainWindow {
    private slots:
     void newMainFrame(const cv::Mat& frame);
     void imageWorkerDone(const QList<TrackDto>& tracks);
+    void onBarcodeDetected(const QList<BarcodeDto>& barcodes);
 
    private:
     Ui::MainWindow* ui;
@@ -37,6 +39,7 @@ class MainWindow : public QMainWindow {
     QThread _imageProcessThread;
 
     QList<TrackDto> _dects;
+    QList<BarcodeDto> _barcodes;
 
     void initVideoCapturer(const QString& url);
     void initImageWorker();

@@ -50,6 +50,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         domain/detection/dto.h domain/detection/dto.cpp
         domain/mot/dto.h domain/mot/dto.cpp
         adapter/mot/tracker.h adapter/mot/tracker.cpp
+        domain/barcode/dto.h domain/barcode/dto.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ${CMAKE_PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -79,7 +80,7 @@ target_include_directories(
 target_link_libraries(
     ${CMAKE_PROJECT_NAME} PRIVATE 
     Qt${QT_VERSION_MAJOR}::Widgets 
-    opencv_core opencv_videoio 
+    opencv_core opencv_videoio opencv_objdetect
     ${ONNXRUNTIME_LIBRARY} 
     bytetrack)
 
