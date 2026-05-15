@@ -26,7 +26,9 @@ find_library(ONNXRUNTIME_LIBRARY onnxruntime
     PATHS ${ONNXRUNTIME_ROOT}/lib
 )
 
+add_subdirectory(lib/bytetrack)
 
+list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.11.0/gcc_64/lib/cmake/Qt6")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -46,6 +48,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         domain/product/valueobjects.h domain/product/valueobjects.cpp
         adapter/imageworker/imageworker.h adapter/imageworker/imageworker.cpp
         domain/detection/dto.h domain/detection/dto.cpp
+        domain/mot/dto.h domain/mot/dto.cpp
+        adapter/mot/tracker.h adapter/mot/tracker.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ${CMAKE_PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -65,8 +69,19 @@ else()
     endif()
 endif()
 
-target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/lib/yolos_cpp/include ${ONNXRUNTIME_INCLUDE_DIR})
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets opencv_core opencv_videoio ${ONNXRUNTIME_LIBRARY})
+target_include_directories(
+    ${CMAKE_PROJECT_NAME} PUBLIC 
+    ${CMAKE_SOURCE_DIR} 
+    ${CMAKE_SOURCE_DIR}/lib/yolos_cpp/include 
+    ${ONNXRUNTIME_INCLUDE_DIR} 
+    ${CMAKE_SOURCE_DIR}/lib/bytetrack/include)
+
+target_link_libraries(
+    ${CMAKE_PROJECT_NAME} PRIVATE 
+    Qt${QT_VERSION_MAJOR}::Widgets 
+    opencv_core opencv_videoio 
+    ${ONNXRUNTIME_LIBRARY} 
+    bytetrack)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

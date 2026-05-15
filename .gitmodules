@@ -1,3 +1,6 @@
 [submodule "lib/yolos_cpp"]
 	path = lib/yolos_cpp
 	url = https://github.com/Geekgineer/YOLOs-CPP.git
+[submodule "lib/bytetrack"]
+	path = lib/bytetrack
+	url = https://github.com/Vertical-Beach/ByteTrack-cpp.git

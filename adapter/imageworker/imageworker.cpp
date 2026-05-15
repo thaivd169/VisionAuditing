@@ -1,7 +1,7 @@
 #include "imageworker.h"
 
 ImageWorker::ImageWorker(QObject* parent)
-    : detector(nullptr) {
+    : detector(nullptr), tracker(nullptr) {
 }
 
 ImageWorker::~ImageWorker() {
@@ -9,23 +9,30 @@ ImageWorker::~ImageWorker() {
         delete detector;
         detector = nullptr;
     }
+    if (tracker) {
+        delete tracker;
+        tracker = nullptr;
+    }
 }
 
 void ImageWorker::startSession() {
     detector = new ObjectDetector();
     detector->init();
+    tracker = new Tracker();
+    tracker->init();
 }
 
 void ImageWorker::fetchSession(const cv::Mat& frame) {
-    std::vector<DetectionDto> results;
-    detector->process(frame, results);
-    QList<DetectionDto> output;
-    for (const auto& result : results) {
-        output.append(result);
-    }
+    std::vector<DetectionDto> detResults;
+    detector->process(frame, detResults);
+    std::vector<TrackDto> tracked = tracker->update(detResults);
+    QList<TrackDto> output(tracked.begin(), tracked.end());
     emit done(output);
 }
 
 void ImageWorker::stopSession() {
     detector->stop();
+    tracker->stop();
+    delete tracker;
+    tracker = nullptr;
 }

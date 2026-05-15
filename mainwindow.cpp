@@ -61,8 +61,8 @@ void MainWindow::newMainFrame(const cv::Mat& mainFrame) {
     displayFrame(mainStreamFrame);
 }
 
-void MainWindow::imageWorkerDone(const QList<DetectionDto>& dects) {
-    _dects = dects;
+void MainWindow::imageWorkerDone(const QList<TrackDto>& tracks) {
+    _dects = tracks;
 }
 
 QImage convertMat2QImage(const cv::Mat& inMat) {
@@ -125,14 +125,14 @@ void MainWindow::drawOsd(cv::Mat& frame) {
         const auto& ytl = dect.getBBox().getYtl();
         const auto& width = dect.getBBox().getWidth();
         const auto& height = dect.getBBox().getHeight();
-        const cv::Scalar& color = cv::Scalar(0,0,255);
+        const cv::Scalar& color = cv::Scalar(0, 0, 255);
         const int& thickness = 2;
         cv::rectangle(frame,
                       cv::Point(xtl, ytl),
                       cv::Point(xtl + width, ytl + height),
                       color, thickness, cv::LINE_AA);
 
-        std::string label = dect.getClassName() + ": " +
+        std::string label = "ID:" + std::to_string(dect.getId()) + " " +
                             std::to_string(static_cast<int>(dect.getConfidenceScore() * 100)) + "%";
         const int fontFace = cv::FONT_HERSHEY_SIMPLEX;
         const double fontScale = 0.6;
