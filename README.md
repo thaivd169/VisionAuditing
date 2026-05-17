@@ -9,17 +9,13 @@
     - [Qt6](#qt6)
     - [Build and release OpenCV library](#build-and-release-opencv-library)
     - [Install OnnxRuntime library](#install-onnxruntime-library)
-    - [Download AI models](#download-ai-models)
-  - [At the second times](#at-the-second-times)
-    - [Preparation](#preparation-1)
-    - [Arrangement](#arrangement)
-- [Contributors](#contributors)
+    - [Download AI models and export to ONNX format](#download-ai-models-and-export-to-onnx-format)
 
 
 # Todo list
 - [x] Install OpenCV
-- [ ] Integrate Object Detection (use YOLOs-CPP)
-- [ ] Integrate MOT (use ByteTracker)
+- [x] Integrate Object Detection (use YOLOs-CPP)
+- [x] Integrate MOT (use ByteTracker)
 
 # Introduction
 - A Back-end service for audit processing by Camera AI System
@@ -40,15 +36,17 @@ sudo apt -y install libeigen3-dev libfreetype-dev libharfbuzz-dev cmake libboost
 ### Build and release OpenCV library
 - Check out *opencv* and *opencv_contrib* repos to *4.13.0* tag
 ```
+# Prepare dependencies
+sudo apt -y install libeigen3-dev libfreetype-dev libharfbuzz-dev cmake libboost-all-dev libx264-dev
 # Export Qt6 dir before
-export Qt6_DIR=/home/thaivd/Qt/6.11.0/gcc_64/lib/cmake
+export Qt6_DIR=$HOME/Qt/6.11.0/gcc_64/lib/cmake
 # Build and install opencv
 cd opencv
 rm -rf build/
 mkdir build
 cd build
 cmake \
-    -D CMAKE_INSTALL_PREFIX=/home/thaivd/TDIC/3rdparty/opencv \
+    -D CMAKE_INSTALL_PREFIX=$HOME/TDIC/3rdparty/opencv \
     -D CMAKE_BUILD_TYPE=RELEASE \
     -D BUILD_JAVA=OFF \
     -D BUILD_FAT_JAVA_LIB=OFF \
@@ -66,19 +64,26 @@ ldconfig
 ```
 ### Install OnnxRuntime library
 ```
+cd ~/Downloads
 wget https://github.com/microsoft/onnxruntime/releases/download/v1.26.0/onnxruntime-linux-x64-1.26.0.tgz
 sha256sum onnxruntime-linux-x64-1.26.0.tgz
-tar -xvf ./onnxruntime-linux-x64-1.26.0.tgz
+tar -xvf ./onnxruntime-linux-x64-1.26.0.tgz -C $HOME/TDIC/3rdparty
+mv ~/TDIC/3rdparty/onnxruntime-linux-x64-1.26.0 ~/TDIC/3rdparty/onnxruntime
 ```
 
-### Download AI models 
-
-
-## At the second times
-### Preparation
-
-### Arrangement
-
-# Contributors
-
-
+### Download AI models and export to ONNX format
+```
+-> create folder assets/models
+cd ~/Music
+mkdir yolo11 && cd yolo11
+python3 -m venv .venv
+source .venv/bin/activate
+pip install ultralytics onnx onnxslim onnxruntime
+# download `yolo11n.pt` from https://docs.ultralytics.com/models/yolo11 to 
+yolo export \
+  model=yolo11n.pt \
+  format=onnx \
+  imgsz=640 \
+  dynamic=False \
+  simplify=True 
+```

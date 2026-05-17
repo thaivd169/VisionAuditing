@@ -26,11 +26,11 @@ find_library(ONNXRUNTIME_LIBRARY onnxruntime
     PATHS ${ONNXRUNTIME_ROOT}/lib
 )
 
-add_subdirectory(lib/bytetrack)
-
 list(APPEND CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.11.0/gcc_64/lib/cmake/Qt6")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
+add_subdirectory(lib/bytetrack)
 
 set(PROJECT_SOURCES
         main.cpp
