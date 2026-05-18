@@ -8,10 +8,11 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
 target_include_directories(${CMAKE_PROJECT_NAME} 
     PUBLIC 
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
 )
 target_link_libraries(${CMAKE_PROJECT_NAME} 
-    PUBLIC 
-    domain
-    adapter
-    infra
+  PUBLIC 
+  adapter
+  infra
+  domain
 )

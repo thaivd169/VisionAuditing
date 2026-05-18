@@ -1,10 +1,5 @@
-add_subdirectory(video_capturer)
-add_subdirectory(image_worker)
 add_subdirectory(ui)
+add_subdirectory(video)
 
-add_library(adapter 
-    STATIC
-    adapter_videocapturer
-    adapter_image_worker
-    adapter_ui
-)
+add_library(adapter STATIC)
+target_link_libraries(adapter PUBLIC adapter_ui adapter_video)

@@ -5,9 +5,9 @@
 
 Yolor::Yolor()
     : infer_(std::make_unique<yolos::det::YOLODetector>(
-          "/home/thai/TDIC/VisionAuditing/assets/models/YOLOv11n.onnx",
-          "/home/thai/TDIC/VisionAuditing/assets/models/coco.names",
-          true)) {
+          "/home/thaivd/TDIC/testVisionAudit/assets/detection/yolo11n.onnx",
+          "/home/thaivd/TDIC/testVisionAudit/assets/detection/coco.names",
+          false)) {
 }
 
 Yolor::~Yolor() {
@@ -30,8 +30,12 @@ std::optional<std::vector<DetectionBox>> Yolor::process(const cv::Mat& frame) {
         if (!maybeBox)
             continue;
 
-        results.emplace_back(maybeBox.value(), item.conf,
-                             infer_->getClassNames().at(item.classId));
+        auto maybeDet = DetectionBox::create(maybeBox.value(), item.conf,
+                                             infer_->getClassNames().at(item.classId));
+        if (!maybeDet)
+            continue;
+
+        results.push_back(maybeDet.value());
     }
 
     return results;

@@ -1,38 +1,24 @@
-#include "imageworker.h"
+#include "worker.h"
 
-ImageWorker::ImageWorker(QObject* parent)
-    : detector(nullptr), tracker(nullptr) {
+ImageWorker::ImageWorker(std::unique_ptr<IDetector> detector,
+                         std::unique_ptr<ITracker> tracker,
+                         QObject* parent)
+    : detector_(std::move(detector)),
+      tracker_(std::move(tracker)) {
 }
 
 ImageWorker::~ImageWorker() {
-    if (detector) {
-        delete detector;
-        detector = nullptr;
-    }
-    if (tracker) {
-        delete tracker;
-        tracker = nullptr;
-    }
 }
 
-void ImageWorker::startSession() {
-    detector = new ObjectDetector();
-    detector->init();
-    tracker = new Tracker();
-    tracker->init();
-}
-
-void ImageWorker::fetchSession(const cv::Mat& frame) {
-    std::vector<DetectionDto> detResults;
-    detector->process(frame, detResults);
-    std::vector<TrackDto> tracked = tracker->update(detResults);
-    QList<TrackDto> output(tracked.begin(), tracked.end());
+void ImageWorker::fetch(const cv::Mat& frame) {
+    auto maybeDects = detector_->process(frame);
+    if (!maybeDects) {
+        return;
+    }
+    auto maybeTracks = tracker_->update(maybeDects.value());
+    if (!maybeTracks) {
+        return;
+    }
+    QList<Track> output(maybeTracks.value().begin(), maybeTracks.value().end());
     emit done(output);
-}
-
-void ImageWorker::stopSession() {
-    detector->stop();
-    tracker->stop();
-    delete tracker;
-    tracker = nullptr;
 }

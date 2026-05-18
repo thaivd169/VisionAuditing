@@ -7,52 +7,12 @@
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent),
-      _videoCapturer(nullptr),
-      _imageWorker(nullptr),
       ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    qRegisterMetaType<cv::Mat>("cv::Mat");
-    initVideoCapturer("rtsp://thaivd:vuducthai169@10.0.80.252:554/Streaming/Channels/101");
-    initImageWorker();
-
-    startThreads();
-
-    emit startCapture();
 }
 
 MainWindow::~MainWindow() {
-    _captureThread.wait();
-    _captureThread.quit();
-
-    _imageProcessThread.wait();
-    _imageProcessThread.quit();
-
     delete ui;
-}
-
-void MainWindow::initVideoCapturer(const QString& url) {
-    _videoCapturer = new VideoCapturer(url);
-    _videoCapturer->moveToThread(&_captureThread);
-    connect(&_captureThread, &QThread::finished, _videoCapturer, &VideoCapturer::deleteLater);
-    connect(this, &MainWindow::startCapture, _videoCapturer, &VideoCapturer::startCapture);
-    connect(this, &MainWindow::stopCapture, _videoCapturer, &VideoCapturer::stopCapture);
-    connect(_videoCapturer, &VideoCapturer::newFrame, this, &MainWindow::newMainFrame);
-}
-
-void MainWindow::initImageWorker() {
-    _imageWorker = new ImageWorker();
-    _imageWorker->moveToThread(&_imageProcessThread);
-    connect(&_imageProcessThread, &QThread::finished, _imageWorker, &ImageWorker::deleteLater);
-    connect(&_imageProcessThread, &QThread::finished, _imageWorker, &ImageWorker::stopSession);
-    connect(&_imageProcessThread, &QThread::started, _imageWorker, &ImageWorker::startSession);
-    connect(_videoCapturer, &VideoCapturer::newFrame, _imageWorker, &ImageWorker::fetchSession);
-    connect(_imageWorker, &ImageWorker::done, this, &MainWindow::imageWorkerDone);
-}
-
-void MainWindow::startThreads() {
-    // Start Threads
-    _captureThread.start();
-    _imageProcessThread.start();
 }
 
 void MainWindow::newMainFrame(const cv::Mat& mainFrame) {
@@ -61,8 +21,8 @@ void MainWindow::newMainFrame(const cv::Mat& mainFrame) {
     displayFrame(mainStreamFrame);
 }
 
-void MainWindow::imageWorkerDone(const QList<TrackDto>& tracks) {
-    _dects = tracks;
+void MainWindow::imageWorkerDone(const QList<Track>& tracks) {
+    dects_ = tracks;
 }
 
 QImage convertMat2QImage(const cv::Mat& inMat) {
@@ -117,14 +77,14 @@ void MainWindow::displayFrame(cv::Mat& frame) {
 }
 
 void MainWindow::drawOsd(cv::Mat& frame) {
-    if (_dects.empty()) {
+    if (dects_.empty()) {
         return;
     }
-    for (const auto& dect : _dects) {
-        const auto& xtl = dect.getBBox().getXtl();
-        const auto& ytl = dect.getBBox().getYtl();
-        const auto& width = dect.getBBox().getWidth();
-        const auto& height = dect.getBBox().getHeight();
+    for (const auto& dect : dects_) {
+        const auto& xtl = dect.getBoundingBox().getXtl();
+        const auto& ytl = dect.getBoundingBox().getYtl();
+        const auto& width = dect.getBoundingBox().getWidth();
+        const auto& height = dect.getBoundingBox().getHeight();
         const cv::Scalar& color = cv::Scalar(0, 0, 255);
         const int& thickness = 2;
         cv::rectangle(frame,

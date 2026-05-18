@@ -1,8 +1,13 @@
-#ifndef MAIN_SESSION_H
-#define MAIN_SESSION_H
+#ifndef APP_SESSION_H
+#define APP_SESSION_H
 
 #include <QObject>
 #include <QThread>
+#include <memory>
+
+#include "adapter/ui/mainwindow.h"
+#include "adapter/video/capturer.h"
+#include "adapter/video/worker.h"
 
 class Session : public QObject {
     Q_OBJECT
@@ -15,6 +20,14 @@ class Session : public QObject {
    public slots:
 
    private:
+    void startThreads();
+
+   private:
+    std::unique_ptr<VideoCapturer> videoCapturer_;
+    std::unique_ptr<ImageWorker> imageWorker_;
+    MainWindow* mainWindow_;
+    QThread captureThread_;
+    QThread workerThread_;
 };
 
 #endif

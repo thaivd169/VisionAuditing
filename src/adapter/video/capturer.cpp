@@ -1,9 +1,9 @@
-#include "videocapturer.h"
+#include "capturer.h"
 
 #include <QDebug>
 #include <QObject>
 
-VideoCapturer::VideoCapturer(const QString &path, uint fps, QObject *parent) {
+VideoCapturer::VideoCapturer(const QString& path, uint fps, QObject* parent) {
     setPath(path);
     readingTimer = new QTimer(this);
     readingTimer->setInterval(1000 / fps);
@@ -13,7 +13,7 @@ VideoCapturer::~VideoCapturer() {
     stopCapture();
 }
 
-void VideoCapturer::setPath(const QString &path) {
+void VideoCapturer::setPath(const QString& path) {
     m_path = path;
 }
 

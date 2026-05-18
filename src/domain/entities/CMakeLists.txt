@@ -4,5 +4,5 @@ add_library(domain_entities STATIC
 )
 target_include_directories(domain_entities
     PUBLIC
-    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/src
 )
