@@ -2,13 +2,13 @@ FILE(GLOB_RECURSE sources "*.cpp")
 add_library(infra_barcode STATIC ${sources})
 
 target_include_directories(infra_barcode 
-    PUBLIC
+    PRIVATE
     ${CMAKE_SOURCE_DIR}/src
-    ${CMAKE_SOURCE_DIR}/lib/yolos_cpp/include
+    ${TD_3RDPARTY_PATH}/zxing_cpp/include
     ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(infra_barcode 
-    PUBLIC
+    PRIVATE 
     ZXing::ZXing
     ${OpenCV_LIBS}
 )

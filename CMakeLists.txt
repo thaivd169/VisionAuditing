@@ -64,12 +64,11 @@ find_library(ONNXRUNTIME_LIBRARY onnxruntime
 )
 
 # Setup ZXing library for decoding barcodes
-set(ZXING_READERS ON)
-set(ZXING_WRITERS OFF)
-set(ZXING_EXAMPLES OFF)
-set(CMAKE_AUTOMOC OFF)
-add_subdirectory(lib/zxing_cpp)
-set(CMAKE_AUTOMOC ON)
+list(APPEND CMAKE_PREFIX_PATH "${TD_3RDPARTY_PATH}/zxing_cpp/lib/cmake/ZXing")
+find_package(ZXing REQUIRED)
+message ("[${CMAKE_PROJECT_NAME}] [ZXing] version   :   ${ZXing_VERSION}")
+message ("[${CMAKE_PROJECT_NAME}] [ZXing] include   :   ${ZXing_INCLUDE_DIRS}")
+message ("[${CMAKE_PROJECT_NAME}] [ZXing] libraries :   ${ZXing_LIBRARIES}")
 
 
 add_subdirectory(lib/bytetrack)

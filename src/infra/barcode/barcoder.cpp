@@ -1,7 +1,7 @@
 #include "barcoder.h"
 
-#include <BarcodeFormat.h>
-#include <ReadBarcode.h>
+#include <ZXing/BarcodeFormat.h>
+#include <ZXing/ReadBarcode.h>
 
 #include <opencv2/imgproc.hpp>
 
