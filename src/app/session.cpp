@@ -2,8 +2,10 @@
 
 #include <QDebug>
 
+#include "domain/services/ibarcoder.h"
 #include "domain/services/idetector.h"
 #include "domain/services/itracker.h"
+#include "infra/barcode/barcoder.h"
 #include "infra/detector/yolor.h"
 #include "infra/mot/tracker.h"
 
@@ -24,7 +26,8 @@ Session::Session(QObject* parent)
     // Initialize ImageWorker
     std::unique_ptr<IDetector> detector = std::make_unique<Yolor>();
     std::unique_ptr<ITracker> tracker = std::make_unique<Tracker>();
-    imageWorker_ = std::make_unique<ImageWorker>(std::move(detector), std::move(tracker));
+    std::unique_ptr<IBarcoder> barcoder = std::make_unique<Barcoder>();
+    imageWorker_ = std::make_unique<ImageWorker>(std::move(detector), std::move(tracker), std::move(barcoder));
     imageWorker_->moveToThread(&workerThread_);
     connect(&workerThread_, &QThread::finished, imageWorker_.get(), &ImageWorker::deleteLater);
     connect(videoCapturer_.get(), &VideoCapturer::newFrame, imageWorker_.get(), &ImageWorker::fetch);

@@ -9,6 +9,7 @@
     - [Qt6](#qt6)
     - [Build and release OpenCV library](#build-and-release-opencv-library)
     - [Install OnnxRuntime library](#install-onnxruntime-library)
+    - [Install ZXing library](#install-zxing-library)
     - [Download AI models and export to ONNX format](#download-ai-models-and-export-to-onnx-format)
 
 
@@ -69,6 +70,23 @@ wget https://github.com/microsoft/onnxruntime/releases/download/v1.26.0/onnxrunt
 sha256sum onnxruntime-linux-x64-1.26.0.tgz
 tar -xvf ./onnxruntime-linux-x64-1.26.0.tgz -C $HOME/TDIC/3rdparty
 mv ~/TDIC/3rdparty/onnxruntime-linux-x64-1.26.0 ~/TDIC/3rdparty/onnxruntime
+```
+
+### Install ZXing library
+```
+git clone https://github.com/zxing-cpp/zxing-cpp.git
+cd zxing-cpp
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake .. \
+    -D CMAKE_INSTALL_PREFIX=$HOME/TDIC/3rdparty/zxing_cpp \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D BUILD_SHARED_LIBS=OFF \
+    -D ZXING_EXAMPLES=OFF \
+    -D ZXING_WRITERS=OFF
+
+make install -j$(nproc)
 ```
 
 ### Download AI models and export to ONNX format

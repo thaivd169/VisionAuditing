@@ -32,7 +32,7 @@ project(visionAuditing
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(TD_3RDPARTY_PATH "${CMAKE_SOURCE_DIR}/../3rdparty")
 add_compile_definitions(VISION_AUDITING_VERSION_STRING="${VISION_AUDITING_VERSION}-${GIT_COMMIT_HASH}")
@@ -62,6 +62,15 @@ find_path(ONNXRUNTIME_INCLUDE_DIR onnxruntime_cxx_api.h
 find_library(ONNXRUNTIME_LIBRARY onnxruntime
     PATHS ${ONNXRUNTIME_ROOT}/lib
 )
+
+# Setup ZXing library for decoding barcodes
+set(ZXING_READERS ON)
+set(ZXING_WRITERS OFF)
+set(ZXING_EXAMPLES OFF)
+set(CMAKE_AUTOMOC OFF)
+add_subdirectory(lib/zxing_cpp)
+set(CMAKE_AUTOMOC ON)
+
 
 add_subdirectory(lib/bytetrack)
 add_subdirectory(src/infra)
