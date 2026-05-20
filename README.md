@@ -76,6 +76,7 @@ mv ~/TDIC/3rdparty/onnxruntime-linux-x64-1.26.0 ~/TDIC/3rdparty/onnxruntime
 ```
 git clone https://github.com/zxing-cpp/zxing-cpp.git
 cd zxing-cpp
+git checkout v3.0.2
 git submodule update --init --recursive
 mkdir build
 cd build

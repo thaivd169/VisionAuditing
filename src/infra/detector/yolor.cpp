@@ -5,8 +5,8 @@
 
 Yolor::Yolor()
     : infer_(std::make_unique<yolos::det::YOLODetector>(
-          "/home/thaivd/TDIC/testVisionAudit/assets/detection/yolo11n.onnx",
-          "/home/thaivd/TDIC/testVisionAudit/assets/detection/coco.names",
+          "/home/thaivd/TDIC/VisionAuditing/assets/detection/yolo11n.onnx",
+          "/home/thaivd/TDIC/VisionAuditing/assets/detection/coco.names",
           false)) {
 }
 
