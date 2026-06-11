@@ -25,7 +25,9 @@
 # Environment for development
 ## At the first time
 ### System
-- Reference to [My Jetson Orin AGX](./docs/jetson_system_information.md)
+1. CPU: 12th Gen Intel(R) Core(TM) i5-12400F
+2. RAM: 31GiB
+3. dGPU: GeForce GTX 1660 6GiB, NVIDIA Corporation
 ### Preparation
 ```
 sudo apt update
